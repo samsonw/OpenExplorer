@@ -1,0 +1,18 @@
+## OpenExplorer
+
+OpenExplorer is a plugin for Eclipse, it opened the files selected in “Package Explorer” and “Navigator” in the system file browser.
+
+Now Support Eclipse 3.2 and later, Mac OS X, Linux (with nautilus) and Windows.
+
+## Screenshots
+<a href="http://blog.samsonis.me/wp-content/uploads/2009/02/openexplorer.png"><img style="border: medium none;" title="Open Explorer" src="http://blog.samsonis.me/wp-content/uploads/2009/02/openexplorer.png" alt="Open Explorer" width="300" height="216"></a>
+
+## Changelog
+
+### 1.1.0.v201010021600
+* added "/select," options for windows explorer.  If the selected resource is a file, it will be opened that the file selected in explorer
+* added Mac OS X support
+
+### 1.0.0
+* initial implement the feature
+
