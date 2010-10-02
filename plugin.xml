@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.2"?>
+<plugin>
+   <extension
+         point="org.eclipse.ui.actionSets">
+      <actionSet
+            id="OpenExplorer.actionSet"
+            label="OpenExplorer Action Set"
+            visible="true">
+         <action
+               class="openexplorer.actions.OpenExplorerAction"
+               icon="icons/OpenExplorer.png"
+               id="openexplorer.actions.OpenExplorer"
+               label="&amp;OpenExplorer Action"
+               toolbarPath="OpenExplorer"
+               tooltip="Open Explorer">
+         </action>
+      </actionSet>
+   </extension>
+
+</plugin>
