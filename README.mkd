@@ -17,7 +17,7 @@ To uninstall, just remove the jar.
 ## Changelog
 
 ### 1.1.0.v201010021600
-* added "/select," options for windows explorer.  If the selected resource is a file, it will be opened that the file selected in explorer
+* added "/select," options for windows explorer.  If the selected resource is a file, it will be opened with that file selected in explorer
 * added Mac OS X support
 
 ### 1.0.0
