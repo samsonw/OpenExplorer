@@ -14,7 +14,13 @@ Restart Eclipse workbench.
 
 To uninstall, just remove the jar.
 
+## Tips
+* OpenExplorer supports multiple selections, so if you select multiple directories/files in package explorer and click the icon, all the selected directories/files will be opened.
+
 ## Changelog
+
+### 1.2.0.v201101172217
+* added ["open current editing file"](http://blog.samsonis.me/2009/02/open-explorer-plugin-for-eclipse/comment-page-1/#comment-1201 "open current editing file") function if current focus is the main editor
 
 ### 1.1.0.v201010021600
 * added "/select," options for windows explorer.  If the selected resource is a file, it will be opened with that file selected in explorer
