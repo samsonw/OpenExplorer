@@ -28,8 +28,8 @@ public class Activator extends AbstractUIPlugin {
      * )
      */
     public void start(BundleContext context) throws Exception {
-	super.start(context);
-	plugin = this;
+        super.start(context);
+        plugin = this;
     }
 
     /*
@@ -40,8 +40,8 @@ public class Activator extends AbstractUIPlugin {
      * )
      */
     public void stop(BundleContext context) throws Exception {
-	plugin = null;
-	super.stop(context);
+        plugin = null;
+        super.stop(context);
     }
 
     /**
@@ -50,7 +50,7 @@ public class Activator extends AbstractUIPlugin {
      * @return the shared instance
      */
     public static Activator getDefault() {
-	return plugin;
+        return plugin;
     }
 
 }

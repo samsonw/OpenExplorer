@@ -27,92 +27,91 @@ public class OpenExplorerAction implements IWorkbenchWindowActionDelegate {
     private String systemBrowser = "explorer";
 
     public OpenExplorerAction() {
-	this.os = System.getProperty("osgi.os");
-	if (WINDOWS.equalsIgnoreCase(this.os)) {
-	    this.systemBrowser = "explorer";
-	} else if (LINUX.equalsIgnoreCase(this.os)) {
-	    this.systemBrowser = "nautilus";
-	} else if (MACOSX.equalsIgnoreCase(this.os)) {
-	    this.systemBrowser = "open";
-	}
+        this.os = System.getProperty("osgi.os");
+        if (WINDOWS.equalsIgnoreCase(this.os)) {
+            this.systemBrowser = "explorer";
+        } else if (LINUX.equalsIgnoreCase(this.os)) {
+            this.systemBrowser = "nautilus";
+        } else if (MACOSX.equalsIgnoreCase(this.os)) {
+            this.systemBrowser = "open";
+        }
     }
 
     public void run(IAction action) {
-	if (this.currentSelection == null || this.currentSelection.isEmpty()) {
-	    return;
-	}
-	if (this.currentSelection instanceof TreeSelection) {
-	    TreeSelection treeSelection = (TreeSelection) this.currentSelection;
+        if (this.currentSelection == null || this.currentSelection.isEmpty()) {
+            return;
+        }
+        if (this.currentSelection instanceof TreeSelection) {
+            TreeSelection treeSelection = (TreeSelection) this.currentSelection;
 
-	    TreePath[] paths = treeSelection.getPaths();
+            TreePath[] paths = treeSelection.getPaths();
 
-	    for (int i = 0; i < paths.length; i++) {
-		TreePath path = paths[i];
-		IResource resource = null;
-		Object segment = path.getLastSegment();
-		if ((segment instanceof IResource))
-		    resource = (IResource) segment;
-		else if ((segment instanceof IJavaElement)) {
-		    resource = ((IJavaElement) segment).getResource();
-		}
-		if (resource == null) {
-		    continue;
-		}
-		String browser = this.systemBrowser;
-		String location = resource.getLocation().toOSString();
-		if ((resource instanceof IFile)) {
-		    location = ((IFile) resource).getParent().getLocation()
-			    .toOSString();
-		    if (WINDOWS.equalsIgnoreCase(this.os)) {
-			browser = this.systemBrowser + " /select,";
-			location = ((IFile) resource).getLocation()
-				.toOSString();
-		    }
-		}
-		openInBrowser(browser, location);
-	    }
-	} else if (this.currentSelection instanceof TextSelection) {
-	    // open current editing file
-	    IEditorPart editor = window.getActivePage().getActiveEditor();
-	    if (editor != null) {
-		IFile current_editing_file = (IFile) editor.getEditorInput()
-			.getAdapter(IFile.class);
-		String browser = this.systemBrowser;
-		String location = current_editing_file.getParent()
-			.getLocation().toOSString();
-		if (WINDOWS.equalsIgnoreCase(this.os)) {
-		    browser = this.systemBrowser + " /select,";
-		    location = current_editing_file.getLocation().toOSString();
-		}
-		openInBrowser(browser, location);
-	    }
-	}
+            for (int i = 0; i < paths.length; i++) {
+                TreePath path = paths[i];
+                IResource resource = null;
+                Object segment = path.getLastSegment();
+                if ((segment instanceof IResource))
+                    resource = (IResource) segment;
+                else if ((segment instanceof IJavaElement)) {
+                    resource = ((IJavaElement) segment).getResource();
+                }
+                if (resource == null) {
+                    continue;
+                }
+                String browser = this.systemBrowser;
+                String location = resource.getLocation().toOSString();
+                if ((resource instanceof IFile)) {
+                    location = ((IFile) resource).getParent().getLocation()
+                            .toOSString();
+                    if (WINDOWS.equalsIgnoreCase(this.os)) {
+                        browser = this.systemBrowser + " /select,";
+                        location = ((IFile) resource).getLocation()
+                                .toOSString();
+                    }
+                }
+                openInBrowser(browser, location);
+            }
+        } else if (this.currentSelection instanceof TextSelection) {
+            // open current editing file
+            IEditorPart editor = window.getActivePage().getActiveEditor();
+            if (editor != null) {
+                IFile current_editing_file = (IFile) editor.getEditorInput()
+                        .getAdapter(IFile.class);
+                String browser = this.systemBrowser;
+                String location = current_editing_file.getParent()
+                        .getLocation().toOSString();
+                if (WINDOWS.equalsIgnoreCase(this.os)) {
+                    browser = this.systemBrowser + " /select,";
+                    location = current_editing_file.getLocation().toOSString();
+                }
+                openInBrowser(browser, location);
+            }
+        }
     }
 
     private void openInBrowser(String browser, String location) {
-	try {
-	    if (MACOSX.equalsIgnoreCase(this.os)) {
-		Runtime.getRuntime().exec(new String[] { browser, location });
-	    } else {
-		Runtime.getRuntime().exec(browser + " \"" + location + "\"");
-	    }
-
-	} catch (IOException e) {
-	    MessageDialog.openError(this.window.getShell(),
-		    "OpenExploer Error", "Can't open \"" + location + "\"");
-	    e.printStackTrace();
-	}
+        try {
+            if (WINDOWS.equalsIgnoreCase(this.os)) {
+                Runtime.getRuntime().exec(browser + " \"" + location + "\"");
+            } else {
+                Runtime.getRuntime().exec(new String[] { browser, location });
+            }
+        } catch (IOException e) {
+            MessageDialog.openError(this.window.getShell(),
+                    "OpenExploer Error", "Can't open \"" + location + "\"");
+            e.printStackTrace();
+        }
     }
 
     public void selectionChanged(IAction action, ISelection selection) {
-	this.currentSelection = selection;
+        this.currentSelection = selection;
     }
 
     public void dispose() {
     }
 
     public void init(IWorkbenchWindow window) {
-	this.window = window;
+        this.window = window;
     }
 
 }
