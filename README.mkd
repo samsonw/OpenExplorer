@@ -19,6 +19,9 @@ To uninstall, just remove the jar.
 
 ## Changelog
 
+### 1.3.0.v201107191404
+* fixed an issue on linux
+
 ### 1.2.0.v201101172217
 * added ["open current editing file"](http://blog.samsonis.me/2009/02/open-explorer-plugin-for-eclipse/comment-page-1/#comment-1201 "open current editing file") function if current focus is the main editor
 
