@@ -1,117 +1,44 @@
 package openexplorer.actions;
 
-import java.io.IOException;
+/**
+ * Copyright (c) 2011 Samson Wu
+ * Permission is hereby granted, free of charge, to any person obtaining
+ * a copy of this software and associated documentation files (the
+ * "Software"), to deal in the Software without restriction, including
+ * without limitation the rights to use, copy, modify, merge, publish,
+ * distribute, sublicense, and/or sell copies of the Software, and to
+ * permit persons to whom the Software is furnished to do so, subject to
+ * the following conditions:
+ * 
+ * The above copyright notice and this permission notice shall be
+ * included in all copies or substantial portions of the Software.
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+ * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+ * MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+ * NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
+ * LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
+ * OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
+ * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ * 
+ */
 
-import org.eclipse.core.resources.IFile;
-import org.eclipse.core.resources.IResource;
-import org.eclipse.jdt.core.IJavaElement;
-import org.eclipse.jface.action.IAction;
-import org.eclipse.jface.dialogs.MessageDialog;
-import org.eclipse.jface.text.TextSelection;
-import org.eclipse.jface.viewers.ISelection;
-import org.eclipse.jface.viewers.TreePath;
-import org.eclipse.jface.viewers.TreeSelection;
-import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.IWorkbenchWindowActionDelegate;
 
-public class OpenExplorerAction implements IWorkbenchWindowActionDelegate {
-    private IWorkbenchWindow window;
-    private ISelection currentSelection;
-
-    private String os;
-    public static final String WINDOWS = "win32";
-    public static final String LINUX = "linux";
-    public static final String MACOSX = "macosx";
-
-    private String systemBrowser = "explorer";
-
-    public OpenExplorerAction() {
-        this.os = System.getProperty("osgi.os");
-        if (WINDOWS.equalsIgnoreCase(this.os)) {
-            this.systemBrowser = "explorer";
-        } else if (LINUX.equalsIgnoreCase(this.os)) {
-            this.systemBrowser = "nautilus";
-        } else if (MACOSX.equalsIgnoreCase(this.os)) {
-            this.systemBrowser = "open";
-        }
-    }
-
-    public void run(IAction action) {
-        if (this.currentSelection == null || this.currentSelection.isEmpty()) {
-            return;
-        }
-        if (this.currentSelection instanceof TreeSelection) {
-            TreeSelection treeSelection = (TreeSelection) this.currentSelection;
-
-            TreePath[] paths = treeSelection.getPaths();
-
-            for (int i = 0; i < paths.length; i++) {
-                TreePath path = paths[i];
-                IResource resource = null;
-                Object segment = path.getLastSegment();
-                if ((segment instanceof IResource))
-                    resource = (IResource) segment;
-                else if ((segment instanceof IJavaElement)) {
-                    resource = ((IJavaElement) segment).getResource();
-                }
-                if (resource == null) {
-                    continue;
-                }
-                String browser = this.systemBrowser;
-                String location = resource.getLocation().toOSString();
-                if ((resource instanceof IFile)) {
-                    location = ((IFile) resource).getParent().getLocation()
-                            .toOSString();
-                    if (WINDOWS.equalsIgnoreCase(this.os)) {
-                        browser = this.systemBrowser + " /select,";
-                        location = ((IFile) resource).getLocation()
-                                .toOSString();
-                    }
-                }
-                openInBrowser(browser, location);
-            }
-        } else if (this.currentSelection instanceof TextSelection) {
-            // open current editing file
-            IEditorPart editor = window.getActivePage().getActiveEditor();
-            if (editor != null) {
-                IFile current_editing_file = (IFile) editor.getEditorInput()
-                        .getAdapter(IFile.class);
-                String browser = this.systemBrowser;
-                String location = current_editing_file.getParent()
-                        .getLocation().toOSString();
-                if (WINDOWS.equalsIgnoreCase(this.os)) {
-                    browser = this.systemBrowser + " /select,";
-                    location = current_editing_file.getLocation().toOSString();
-                }
-                openInBrowser(browser, location);
-            }
-        }
-    }
-
-    private void openInBrowser(String browser, String location) {
-        try {
-            if (WINDOWS.equalsIgnoreCase(this.os)) {
-                Runtime.getRuntime().exec(browser + " \"" + location + "\"");
-            } else {
-                Runtime.getRuntime().exec(new String[] { browser, location });
-            }
-        } catch (IOException e) {
-            MessageDialog.openError(this.window.getShell(),
-                    "OpenExploer Error", "Can't open \"" + location + "\"");
-            e.printStackTrace();
-        }
-    }
-
-    public void selectionChanged(IAction action, ISelection selection) {
-        this.currentSelection = selection;
-    }
-
-    public void dispose() {
-    }
+/**
+ * @author <a href="mailto:samson959@gmail.com">Samson Wu</a>
+ * @version 1.4.0
+ */
+public class OpenExplorerAction extends AbstractOpenExplorerAction implements
+        IWorkbenchWindowActionDelegate {
 
     public void init(IWorkbenchWindow window) {
         this.window = window;
+        this.shell = this.window.getShell();
+    }
+
+    public void dispose() {
     }
 
 }

@@ -17,5 +17,20 @@
          </action>
       </actionSet>
    </extension>
+   <extension
+         point="org.eclipse.ui.popupMenus">
+         <objectContribution
+            objectClass="org.eclipse.core.runtime.IAdaptable"
+            id="OpenExplorer.popupMenuContribution">
+         <action
+               label="Open Explorer"
+               icon="icons/OpenExplorer.png"
+               class="openexplorer.actions.OpenExplorerPopupAction"
+               menubarPath="additions"
+               enablesFor="*"
+               id="OpenExplorer.popupMenuAction">
+         </action>
+      </objectContribution>
+   </extension>
 
 </plugin>

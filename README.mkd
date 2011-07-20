@@ -19,6 +19,9 @@ To uninstall, just remove the jar.
 
 ## Changelog
 
+### 1.4.0.v201107201657
+* add "Open Explorer" popup menu, in both "Package Explorer"/"Navigator" and "current editing file"
+
 ### 1.3.0.v201107191404
 * fixed an issue on linux
 

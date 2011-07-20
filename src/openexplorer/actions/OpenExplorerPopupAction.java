@@ -1,4 +1,4 @@
-package openexplorer;
+package openexplorer.actions;
 
 /**
  * Copyright (c) 2011 Samson Wu
@@ -23,60 +23,20 @@ package openexplorer;
  * 
  */
 
-import org.eclipse.ui.plugin.AbstractUIPlugin;
-import org.osgi.framework.BundleContext;
+import org.eclipse.jface.action.IAction;
+import org.eclipse.ui.IObjectActionDelegate;
+import org.eclipse.ui.IWorkbenchPart;
 
 /**
- * The activator class controls the plug-in life cycle
- * 
  * @author <a href="mailto:samson959@gmail.com">Samson Wu</a>
  * @version 1.4.0
  */
-public class Activator extends AbstractUIPlugin {
+public class OpenExplorerPopupAction extends AbstractOpenExplorerAction
+        implements IObjectActionDelegate {
 
-    // The plug-in ID
-    public static final String PLUGIN_ID = "OpenExplorer"; //$NON-NLS-1$
-
-    // The shared instance
-    private static Activator plugin;
-
-    /**
-     * The constructor
-     */
-    public Activator() {
-    }
-
-    /*
-     * (non-Javadoc)
-     * 
-     * @see
-     * org.eclipse.ui.plugin.AbstractUIPlugin#start(org.osgi.framework.BundleContext
-     * )
-     */
-    public void start(BundleContext context) throws Exception {
-        super.start(context);
-        plugin = this;
-    }
-
-    /*
-     * (non-Javadoc)
-     * 
-     * @see
-     * org.eclipse.ui.plugin.AbstractUIPlugin#stop(org.osgi.framework.BundleContext
-     * )
-     */
-    public void stop(BundleContext context) throws Exception {
-        plugin = null;
-        super.stop(context);
-    }
-
-    /**
-     * Returns the shared instance
-     * 
-     * @return the shared instance
-     */
-    public static Activator getDefault() {
-        return plugin;
+    public void setActivePart(IAction action, IWorkbenchPart targetPart) {
+        this.window = targetPart.getSite().getWorkbenchWindow();
+        this.shell = targetPart.getSite().getShell();
     }
 
 }
