@@ -25,6 +25,8 @@ package openexplorer.actions;
 
 import java.io.IOException;
 
+import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.jdt.core.IJavaElement;
@@ -63,13 +65,49 @@ public abstract class AbstractOpenExplorerAction implements IActionDelegate {
         if (WINDOWS.equalsIgnoreCase(this.os)) {
             this.systemBrowser = "explorer";
         } else if (LINUX.equalsIgnoreCase(this.os)) {
-            this.systemBrowser = "nautilus";
+            this.systemBrowser = detachLinuxBrowser();
         } else if (MACOSX.equalsIgnoreCase(this.os)) {
             this.systemBrowser = "open";
         }
     }
+    
+    protected String detachLinuxBrowser() {
+    	String result = executeCommand("which dolphin");
+    	if (StringUtils.isBlank(result)) {
+    		result = executeCommand("which nautilus");
+    	}
+    	if (StringUtils.isBlank(result)) {
+    		result = executeCommand("which thunar");
+    	}
+    	if (StringUtils.isBlank(result)) {
+    		result = executeCommand("which pcmanfm");
+    	}
+    	if (StringUtils.isBlank(result)) {
+    		result = executeCommand("which rox");
+    	}
+    	if (StringUtils.isBlank(result)) {
+    		result =  "nautilus";
+    	}
+    	return result;
+    }
 
-    public void run(IAction action) {
+    /**
+	 * @param command
+	 * @return
+	 */
+	private String executeCommand(String command) {
+		String stdout = null;
+		try {
+			Process process = Runtime.getRuntime().exec(command);
+			stdout = IOUtils.toString(process.getInputStream());
+			stdout = StringUtils.remove(StringUtils.trim(stdout), "\n");
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return stdout;
+	}
+
+	public void run(IAction action) {
         if (this.currentSelection == null || this.currentSelection.isEmpty()) {
             return;
         }
