@@ -14,6 +14,4 @@ Require-Bundle: org.eclipse.ui,
 Bundle-RequiredExecutionEnvironment: J2SE-1.5
 Bundle-ActivationPolicy: lazy
 Eclipse-LazyStart: true
-Bundle-ClassPath: lib/commons-io-2.0.1.jar,
- .,
- lib/commons-lang3-3.0.jar
+Bundle-ClassPath: .

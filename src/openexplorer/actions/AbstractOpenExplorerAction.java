@@ -25,8 +25,8 @@ package openexplorer.actions;
 
 import java.io.IOException;
 
-import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang3.StringUtils;
+import openexplorer.util.IOUtils;
+
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.jdt.core.IJavaElement;
@@ -71,27 +71,32 @@ public abstract class AbstractOpenExplorerAction implements IActionDelegate {
         }
     }
     
+    /**
+     * Use {@code which} command to found the modern file manager, if not found use the xdg-open.
+     * @return the file manager
+     */
     protected String detachLinuxBrowser() {
     	String result = executeCommand("which dolphin");
-    	if (StringUtils.isBlank(result)) {
+    	if (result == null || result.trim().equals("")) {
     		result = executeCommand("which nautilus");
     	}
-    	if (StringUtils.isBlank(result)) {
+    	if (result == null || result.trim().equals("")) {
     		result = executeCommand("which thunar");
     	}
-    	if (StringUtils.isBlank(result)) {
+    	if (result == null || result.trim().equals("")) {
     		result = executeCommand("which pcmanfm");
     	}
-    	if (StringUtils.isBlank(result)) {
+    	if (result == null || result.trim().equals("")) {
     		result = executeCommand("which rox");
     	}
-    	if (StringUtils.isBlank(result)) {
+    	if (result == null || result.trim().equals("")) {
     		result =  "xdg-open";
     	}
     	return result;
     }
 
     /**
+     * execute the command and return the result.
 	 * @param command
 	 * @return
 	 */
@@ -100,7 +105,9 @@ public abstract class AbstractOpenExplorerAction implements IActionDelegate {
 		try {
 			Process process = Runtime.getRuntime().exec(command);
 			stdout = IOUtils.toString(process.getInputStream());
-			stdout = StringUtils.remove(StringUtils.trim(stdout), "\n");
+			stdout = stdout.trim();
+			stdout = stdout.replace("\n", "");
+			stdout = stdout.replace("\r", "");
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
