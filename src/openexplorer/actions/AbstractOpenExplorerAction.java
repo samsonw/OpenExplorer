@@ -86,7 +86,7 @@ public abstract class AbstractOpenExplorerAction implements IActionDelegate {
     		result = executeCommand("which rox");
     	}
     	if (StringUtils.isBlank(result)) {
-    		result =  "nautilus";
+    		result =  "xdg-open";
     	}
     	return result;
     }
