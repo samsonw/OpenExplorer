@@ -19,6 +19,10 @@ To uninstall, just remove the jar.
 
 ## Changelog
 
+### 1.5.0.v201108051513
+* add linux file manager detect support
+* add preferences page for file manager selection
+
 ### 1.4.0.v201107201657
 * add "Open Explorer" popup menu, in both "Package Explorer"/"Navigator" and "current editing file"
 
