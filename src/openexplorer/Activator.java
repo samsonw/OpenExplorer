@@ -37,6 +37,9 @@ public class Activator extends AbstractUIPlugin {
     // The plug-in ID
     public static final String PLUGIN_ID = "OpenExplorer"; //$NON-NLS-1$
 
+    // The plugin version
+    public static final String VERSION = "1.5.0";
+
     // The shared instance
     private static Activator plugin;
 

@@ -25,7 +25,9 @@ package openexplorer.actions;
 
 import java.io.IOException;
 
-import openexplorer.util.IOUtils;
+import openexplorer.Activator;
+import openexplorer.util.Messages;
+import openexplorer.util.OperatingSystem;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IResource;
@@ -33,6 +35,8 @@ import org.eclipse.jdt.core.IJavaElement;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.text.ITextSelection;
+import org.eclipse.jface.util.IPropertyChangeListener;
+import org.eclipse.jface.util.PropertyChangeEvent;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.ITreeSelection;
@@ -47,141 +51,102 @@ import org.eclipse.ui.PlatformUI;
  * @author <a href="mailto:samson959@gmail.com">Samson Wu</a>
  * @version 1.4.0
  */
-public abstract class AbstractOpenExplorerAction implements IActionDelegate {
-    protected IWorkbenchWindow window = PlatformUI.getWorkbench()
-            .getActiveWorkbenchWindow();
-    protected Shell shell;
-    protected ISelection currentSelection;
+public abstract class AbstractOpenExplorerAction implements IActionDelegate,
+        IPropertyChangeListener {
+	protected IWorkbenchWindow window = PlatformUI.getWorkbench()
+	        .getActiveWorkbenchWindow();
+	protected Shell shell;
+	protected ISelection currentSelection;
 
-    protected String os;
-    public static final String WINDOWS = "win32";
-    public static final String LINUX = "linux";
-    public static final String MACOSX = "macosx";
+	protected String systemBrowser;
 
-    protected String systemBrowser = "explorer";
+	public AbstractOpenExplorerAction() {
+		this.systemBrowser = OperatingSystem.INSTANCE.getSystemBrowser();
+		Activator.getDefault().getPreferenceStore()
+		        .addPropertyChangeListener(this);
+	}
 
-    public AbstractOpenExplorerAction() {
-        this.os = System.getProperty("osgi.os");
-        if (WINDOWS.equalsIgnoreCase(this.os)) {
-            this.systemBrowser = "explorer";
-        } else if (LINUX.equalsIgnoreCase(this.os)) {
-            this.systemBrowser = detachLinuxBrowser();
-        } else if (MACOSX.equalsIgnoreCase(this.os)) {
-            this.systemBrowser = "open";
-        }
-    }
-    
-    /**
-     * Use {@code which} command to found the modern file manager, if not found use the xdg-open.
-     * @return the file manager
-     */
-    protected String detachLinuxBrowser() {
-    	String result = executeCommand("which dolphin");
-    	if (result == null || result.trim().equals("")) {
-    		result = executeCommand("which nautilus");
-    	}
-    	if (result == null || result.trim().equals("")) {
-    		result = executeCommand("which thunar");
-    	}
-    	if (result == null || result.trim().equals("")) {
-    		result = executeCommand("which pcmanfm");
-    	}
-    	if (result == null || result.trim().equals("")) {
-    		result = executeCommand("which rox");
-    	}
-    	if (result == null || result.trim().equals("")) {
-    		result =  "xdg-open";
-    	}
-    	return result;
-    }
-
-    /**
-     * execute the command and return the result.
-	 * @param command
-	 * @return
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * org.eclipse.jface.util.IPropertyChangeListener#propertyChange(org.eclipse
+	 * .jface.util.PropertyChangeEvent)
 	 */
-	private String executeCommand(String command) {
-		String stdout = null;
-		try {
-			Process process = Runtime.getRuntime().exec(command);
-			stdout = IOUtils.toString(process.getInputStream());
-			stdout = stdout.trim();
-			stdout = stdout.replace("\n", "");
-			stdout = stdout.replace("\r", "");
-		} catch (IOException e) {
-			e.printStackTrace();
+	public void propertyChange(PropertyChangeEvent event) {
+		if (OperatingSystem.INSTANCE.isLinux()) {
+			this.systemBrowser = OperatingSystem.INSTANCE.getSystemBrowser();
 		}
-		return stdout;
 	}
 
 	public void run(IAction action) {
-        if (this.currentSelection == null || this.currentSelection.isEmpty()) {
-            return;
-        }
-        if (this.currentSelection instanceof ITreeSelection) {
-            ITreeSelection treeSelection = (ITreeSelection) this.currentSelection;
+		if (this.currentSelection == null || this.currentSelection.isEmpty()) {
+			return;
+		}
+		if (this.currentSelection instanceof ITreeSelection) {
+			ITreeSelection treeSelection = (ITreeSelection) this.currentSelection;
 
-            TreePath[] paths = treeSelection.getPaths();
+			TreePath[] paths = treeSelection.getPaths();
 
-            for (int i = 0; i < paths.length; i++) {
-                TreePath path = paths[i];
-                IResource resource = null;
-                Object segment = path.getLastSegment();
-                if ((segment instanceof IResource))
-                    resource = (IResource) segment;
-                else if ((segment instanceof IJavaElement)) {
-                    resource = ((IJavaElement) segment).getResource();
-                }
-                if (resource == null) {
-                    continue;
-                }
-                String browser = this.systemBrowser;
-                String location = resource.getLocation().toOSString();
-                if ((resource instanceof IFile)) {
-                    location = ((IFile) resource).getParent().getLocation()
-                            .toOSString();
-                    if (WINDOWS.equalsIgnoreCase(this.os)) {
-                        browser = this.systemBrowser + " /select,";
-                        location = ((IFile) resource).getLocation()
-                                .toOSString();
-                    }
-                }
-                openInBrowser(browser, location);
-            }
-        } else if (this.currentSelection instanceof ITextSelection
-                || this.currentSelection instanceof IStructuredSelection) {
-            // open current editing file
-            IEditorPart editor = window.getActivePage().getActiveEditor();
-            if (editor != null) {
-                IFile current_editing_file = (IFile) editor.getEditorInput()
-                        .getAdapter(IFile.class);
-                String browser = this.systemBrowser;
-                String location = current_editing_file.getParent()
-                        .getLocation().toOSString();
-                if (WINDOWS.equalsIgnoreCase(this.os)) {
-                    browser = this.systemBrowser + " /select,";
-                    location = current_editing_file.getLocation().toOSString();
-                }
-                openInBrowser(browser, location);
-            }
-        }
-    }
+			for (int i = 0; i < paths.length; i++) {
+				TreePath path = paths[i];
+				IResource resource = null;
+				Object segment = path.getLastSegment();
+				if ((segment instanceof IResource))
+					resource = (IResource) segment;
+				else if ((segment instanceof IJavaElement)) {
+					resource = ((IJavaElement) segment).getResource();
+				}
+				if (resource == null) {
+					continue;
+				}
+				String browser = this.systemBrowser;
+				String location = resource.getLocation().toOSString();
+				if ((resource instanceof IFile)) {
+					location = ((IFile) resource).getParent().getLocation()
+					        .toOSString();
+					if (OperatingSystem.INSTANCE.isWindows()) {
+						browser = this.systemBrowser + " /select,";
+						location = ((IFile) resource).getLocation()
+						        .toOSString();
+					}
+				}
+				openInBrowser(browser, location);
+			}
+		} else if (this.currentSelection instanceof ITextSelection
+		        || this.currentSelection instanceof IStructuredSelection) {
+			// open current editing file
+			IEditorPart editor = window.getActivePage().getActiveEditor();
+			if (editor != null) {
+				IFile current_editing_file = (IFile) editor.getEditorInput()
+				        .getAdapter(IFile.class);
+				String browser = this.systemBrowser;
+				String location = current_editing_file.getParent()
+				        .getLocation().toOSString();
+				if (OperatingSystem.INSTANCE.isWindows()) {
+					browser = this.systemBrowser + " /select,";
+					location = current_editing_file.getLocation().toOSString();
+				}
+				openInBrowser(browser, location);
+			}
+		}
+	}
 
-    protected void openInBrowser(String browser, String location) {
-        try {
-            if (WINDOWS.equalsIgnoreCase(this.os)) {
-                Runtime.getRuntime().exec(browser + " \"" + location + "\"");
-            } else {
-                Runtime.getRuntime().exec(new String[] { browser, location });
-            }
-        } catch (IOException e) {
-            MessageDialog.openError(shell, "OpenExploer Error", "Can't open \""
-                    + location + "\"");
-            e.printStackTrace();
-        }
-    }
+	protected void openInBrowser(String browser, String location) {
+		try {
+			if (OperatingSystem.INSTANCE.isWindows()) {
+				Runtime.getRuntime().exec(browser + " \"" + location + "\"");
+			} else {
+				Runtime.getRuntime().exec(new String[] { browser, location });
+			}
+		} catch (IOException e) {
+			MessageDialog.openError(shell, Messages.OpenExploer_Error,
+			        Messages.Cant_Open + " \"" + location + "\"");
+			e.printStackTrace();
+		}
+	}
 
-    public void selectionChanged(IAction action, ISelection selection) {
-        this.currentSelection = selection;
-    }
+	public void selectionChanged(IAction action, ISelection selection) {
+		this.currentSelection = selection;
+	}
 }
