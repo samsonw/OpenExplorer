@@ -4,11 +4,32 @@ OpenExplorer is a plugin for Eclipse, it opened the files selected in “Package
 
 Now Support Eclipse 3.2 and later, Mac OS X, Linux (with nautilus) and Windows.
 
+## Update 2018-2-06
+
+* It works!  (Yes, after 7 years, it still works!  I'm surprised as well!)
+* Tested on latest version of Eclipse (Oxygen 4.7.1 standalone install, Oxygen 4.7.2 installed by Eclipse Installer) on Mac OS X
+* Since [`Download`](https://github.com/samsonw/OpenExplorer/downloads) is deprecated on Github, I've changed to use the new [`Release`](https://github.com/samsonw/OpenExplorer/releases) page 
+* Added some new screenshots below
+
 ## Screenshots
+
+Screenshot on 2011, windows xp
+
 <a href="http://blog.samsonis.me/wp-content/uploads/2009/02/openexplorer.png"><img style="border: medium none;" title="Open Explorer" src="http://blog.samsonis.me/wp-content/uploads/2009/02/openexplorer.png" alt="Open Explorer" width="300" height="216"></a>
 
+Screenshot on 2018, mac os x 10.12.6
+
+<a href="http://blog.samsonis.me/wp-content/uploads/2018/02/open_explorer_2.jpg"><img src="http://blog.samsonis.me/wp-content/uploads/2018/02/open_explorer_3-300x269.jpg" alt="" width="300" height="269" class="alignnone size-medium wp-image-5829" /></a>
+
+<a href="http://blog.samsonis.me/wp-content/uploads/2018/02/open_explorer_1.jpg"><img src="http://blog.samsonis.me/wp-content/uploads/2018/02/open_explorer_2-300x192.jpg" alt="" width="300" height="192" class="alignnone size-medium wp-image-5830" /></a>
+
+<a href="http://blog.samsonis.me/wp-content/uploads/2018/02/open_explorer_3.jpg"><img src="http://blog.samsonis.me/wp-content/uploads/2018/02/open_explorer_1-300x279.jpg" alt="" width="300" height="279" class="alignnone size-medium wp-image-5831" /></a>
+
 ## Install/Uninstall
-[Download](http://github.com/samsonw/OpenExplorer/downloads "Download") the latest version of the plugin, then put it into your Eclipse plugin directory "$ECLIPSE_HOME/plugins" (or "$ECLIPSE_HOME/dropins" for 3.3+ eclipse)
+
+~~[Download](http://github.com/samsonw/OpenExplorer/downloads "Download") the latest version of the plugin~~, Download the latest version of the plugin on the ["Release" page](https://github.com/samsonw/OpenExplorer/releases), then put it into your Eclipse plugin directory "$ECLIPSE_HOME/plugins" (or "$ECLIPSE_HOME/dropins" for 3.3+ eclipse)
+
+On Mac OS X, you can find the "plugins/dropins" folder by right click on "/Applications/Eclipse" (or the Eclipse executable), then "Show Package Contents".
 
 Restart Eclipse workbench.
 
