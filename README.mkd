@@ -38,6 +38,10 @@ To uninstall, just remove the jar.
 ## Tips
 * OpenExplorer supports multiple selections, so if you select multiple directories/files in package explorer and click the icon, all the selected directories/files will be opened.
 
+## Sponsorship
+
+<a href="https://tracking.gitads.io/?campaign=gitads&repo=testrepo&redirect=gitads.io"><img src="https://samsonw.github.io/images/gitads-300X250.png" alt="gitads" /></a>
+
 ## Changelog
 
 ### 1.5.0.v201108051513
