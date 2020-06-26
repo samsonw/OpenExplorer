@@ -40,7 +40,7 @@ To uninstall, just remove the jar.
 
 ## Sponsorship
 
-<a href="https://tracking.gitads.io/?campaign=gitads&repo=testrepo&redirect=gitads.io"><img src="https://samsonw.github.io/images/gitads-300X250.png" alt="gitads" /></a>
+<a href="https://tracking.gitads.io/?repo=OpenExplorer"><img src="https://images.gitads.io/OpenExplorer" alt="gitads" /></a>
 
 ## Changelog
 
