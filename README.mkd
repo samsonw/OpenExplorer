@@ -40,7 +40,7 @@ To uninstall, just remove the jar.
 
 ## Sponsorship
 
-<a href="https://tracking.gitads.io/?repo=OpenExplorer"><img src="OpenExplorer" alt="GitAds"/></a>
+<a href="https://tracking.gitads.io/?repo=OpenExplorer"><img src="https://images.gitads.io/OpenExplorer" alt="GitAds"/></a>
 
 ## Changelog
 
